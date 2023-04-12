@@ -1,17 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ThemeProvider } from "styled-components";
+import App from "./App";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// ThemeProvider에 props를 내려주고 App 에서는 해당 테마들의 색상들을 받을수 있다 (toggle)
+const DarkTheme = {
+  textColor: "#fff",
+  backgroundColor: "#333",
+};
+
+const LightTheme = {
+  textColor: "#333",
+  backgroundColor: "#fff",
+};
+
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={DarkTheme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
