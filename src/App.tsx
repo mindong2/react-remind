@@ -1,6 +1,10 @@
 import styled, { keyframes } from "styled-components";
 
-const Box = styled.div`
+interface BoxProps {
+  bgColors?:string;
+}
+
+const Box = styled.div<BoxProps>`
   background-color: ${({ bgColors }) => bgColors};
   width: 100px;
   height: 100px;
@@ -43,13 +47,14 @@ const Text = styled.h2.attrs({ className: "h222" })`
   font-size: 24px;
 `;
 
-function App() {
+const App =() => {
   return (
     // as로 Flex컴포넌트 (div속성)을 main 속성으로 바꿀수있다
     <Flex as="main">
       <Box bgColors="tomato">
         <Text>Hello</Text>
       </Box>
+      <Box></Box>
       <Box bgColors="teal" />
       <Circle bgColors="black" />
     </Flex>
