@@ -28,3 +28,12 @@ export const getPriceData = async (coinId: string | undefined) => {
     console.log(err);
   }
 };
+
+export const getChartData = async (coinId: string | undefined) => {
+  try {
+    const response = await axios.get(`https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

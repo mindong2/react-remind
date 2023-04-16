@@ -3,7 +3,7 @@ import { Container, Header, Title, Loader } from "../style/CoinsStyle";
 import { useQuery } from "@tanstack/react-query";
 import { getInfoData, getPriceData } from "../utils/apis/api";
 import { Overview, OverviewItem, Description, TabWrap, Tab } from "../style/DetailStyle";
-
+import { Helmet } from "react-helmet";
 interface coinNameType {
   state: {
     name: string;
@@ -81,14 +81,24 @@ const Detail = () => {
   const priceMatch = useMatch("/:coinId/price");
 
   // useQuery의 두번째 인자에는 함수가 들어가야하므로 함수 파라미터를 보낼때 -> 콜백
+  // 3번째 인자는 ms 단위로 업데이트
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(["infoData", coinId], () => getInfoData(coinId));
-  const { isLoading: priceLoading, data: priceData } = useQuery<PriceInfo>(["priceData", coinId], () => getPriceData(coinId));
+  const { isLoading: priceLoading, data: priceData } = useQuery<PriceInfo>(["priceData", coinId], () => getPriceData(coinId), {
+    refetchInterval: 5000,
+  });
   const loading = infoLoading || priceLoading;
+
   return (
     <Container>
+      <Helmet>
+        <title>{state?.name}</title>
+      </Helmet>
       <Header>
         {/* state에 name이 있으면 보여주고 그렇지 않으면 loading... */}
-        <Title>{state?.name}</Title>
+        <Title>
+          <Link to={"/"}>&lt;</Link>
+          {state?.name}
+        </Title>
       </Header>
 
       {loading ? (
@@ -107,8 +117,8 @@ const Detail = () => {
             </OverviewItem>
 
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price</span>
+              <span>{priceData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
 
@@ -139,8 +149,8 @@ const Detail = () => {
               </Link>
             </Tab>
           </TabWrap>
-          {/* chart / price */}
-          <Outlet />
+          {/* chart / price & Outlet에서 prop 전달할땐 context로 보낸 후 받는곳에서 useOutletContext를 이용*/}
+          <Outlet context={{ coinId, state }} />
         </>
       )}
     </Container>

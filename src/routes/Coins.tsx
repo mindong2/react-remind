@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Container, Header, CoinList, Coin, Title, Loader, Img } from "../style/CoinsStyle";
 import { useQuery } from "@tanstack/react-query";
 import { getCoins } from "../utils/apis/api";
+import { Helmet } from "react-helmet";
+
 interface CoinType {
   id: string;
   name: string;
@@ -17,6 +19,10 @@ const Coins = () => {
   const { isLoading, data: Coins } = useQuery<CoinType[]>(["coinsType"], getCoins);
   return (
     <Container>
+      {/* react-helmet -> 헬멧에 작성한 코드가 html의 head로 들어간다 */}
+      <Helmet>
+        <title>Coins List</title>
+      </Helmet>
       <Header>
         <Title>coins</Title>
       </Header>

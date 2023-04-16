@@ -6,8 +6,15 @@ const Container = styled.div`
   padding: 50px 30px;
 `;
 const Header = styled.header`
+  position: relative;
   font-size: 48px;
   text-align: center;
+  a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: ${({ theme }) => theme.textColor};
+  }
 `;
 const CoinList = styled.ul``;
 
