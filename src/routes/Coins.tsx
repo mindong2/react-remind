@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Container, Header, CoinList, Coin, Title, Loader, Img } from "../style/CoinsStyle";
-
+import { useQuery } from "@tanstack/react-query";
+import { getCoins } from "../utils/apis/api";
 interface CoinType {
   id: string;
   name: string;
@@ -13,17 +13,8 @@ interface CoinType {
 }
 
 const Coins = () => {
-  const [coins, setCoins] = useState<CoinType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
-      const json = await response.json();
-      setCoins(json.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
-
+  // react-query는 캐시에 저장해서 useEffect처럼 들어올때마다 불러오지않는다 (아래처럼 isLoading, data 명명가능)
+  const { isLoading, data: Coins } = useQuery<CoinType[]>(["coinsType"], getCoins);
   return (
     <Container>
       <Header>
@@ -31,12 +22,12 @@ const Coins = () => {
       </Header>
 
       <CoinList>
-        {loading ? (
+        {isLoading ? (
           <Loader>loading...</Loader>
         ) : (
-          coins.map((coin) => (
+          Coins?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.name}`} state={{ name: `${coin.name}` }}>
+              <Link to={`/${coin.id}`} state={{ name: `${coin.name}` }}>
                 <Img src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`} alt="" />
                 {coin.name} &rarr;
               </Link>

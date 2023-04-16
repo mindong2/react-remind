@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
 const Container = styled.div`
+  max-width: 960px;
+  margin: 0 auto;
   padding: 50px 30px;
 `;
 const Header = styled.header`
   font-size: 48px;
+  text-align: center;
 `;
 const CoinList = styled.ul``;
 
