@@ -31,9 +31,7 @@ const Global = createGlobalStyle`
     }
     body {
         line-height: 1;
-        background-color: ${({ theme }) => theme.bgColor};
-        color: ${({ theme }) => theme.textColor};
-        font-family: 'Righteous', cursive;
+        /* font-family: 'Righteous', cursive; */
         transition:all .15s ease-in-out;
     }
     ol, ul {
