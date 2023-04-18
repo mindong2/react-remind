@@ -4,6 +4,7 @@ const Container = styled.div`
   max-width: 960px;
   margin: 0 auto;
   padding: 50px 30px;
+  transition:all .15s ease-in-out;
 `;
 const Header = styled.header`
   position: relative;
@@ -22,8 +23,11 @@ const Coin = styled.li`
   margin: 20px auto;
   max-width: 480px;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.textColor};
-  color: ${({ theme }) => theme.bgColor};
+  transition:all .15s ease-in-out;
+  background-color: ${({ theme }) => theme.bgColor};
+  color: ${({ theme }) => theme.textColor};
+  border:1px solid ${({theme}) => theme.borderColor};
+  overflow:hidden;
 
   a {
     display: flex;
@@ -32,6 +36,7 @@ const Coin = styled.li`
     padding: 20px 15px;
     transition: all 0.15s linear;
     &:hover {
+      background-color:${({theme}) => theme.hoverColor};
       color: ${({ theme }) => theme.accentColor};
     }
   }

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Container, Header, CoinList, Coin, Title, Loader, Img } from "../style/CoinsStyle";
 import { useQuery } from "@tanstack/react-query";
 import { getCoins } from "../utils/apis/api";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 interface CoinType {
   id: string;
@@ -20,9 +20,11 @@ const Coins = () => {
   return (
     <Container>
       {/* react-helmet -> 헬멧에 작성한 코드가 html의 head로 들어간다 */}
-      <Helmet>
-        <title>Coins List</title>
-      </Helmet>
+      <HelmetProvider>
+        <Helmet>
+          <title>Coins List</title>
+        </Helmet>
+      </HelmetProvider>
       <Header>
         <Title>coins</Title>
       </Header>

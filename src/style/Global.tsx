@@ -34,6 +34,7 @@ const Global = createGlobalStyle`
         background-color: ${({ theme }) => theme.bgColor};
         color: ${({ theme }) => theme.textColor};
         font-family: 'Righteous', cursive;
+        transition:all .15s ease-in-out;
     }
     ol, ul {
         list-style: none;
@@ -54,6 +55,7 @@ const Global = createGlobalStyle`
         text-decoration: none;
         color:inherit;
     }
+
 `;
 
 export default Global;
