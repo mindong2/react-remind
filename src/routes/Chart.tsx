@@ -3,6 +3,8 @@ import { useOutletContext } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getChartData } from "../utils/apis/api";
 import APexChart from "react-apexcharts";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../recoil/theme";
 interface ContextType {
   coinId: string;
   state: {
@@ -23,6 +25,8 @@ interface DateTime {
 const Chart = () => {
   const { coinId, state } = useOutletContext<ContextType>();
   const { isLoading, data: dateTime } = useQuery<DateTime[]>(["ohlcv", coinId], () => getChartData(coinId), { refetchInterval: 5000 });
+  const isDark = useRecoilValue(isDarkAtom);
+  
   return (
     <>
       {isLoading ? (
@@ -38,7 +42,7 @@ const Chart = () => {
           ]}
           options={{
             theme: {
-              mode: "dark",
+              mode: isDark ? 'dark' : 'light',
             },
             chart: {
               height: 350,

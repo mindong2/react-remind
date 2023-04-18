@@ -3,7 +3,7 @@ import { Container, Header, Title, Loader } from "../style/CoinsStyle";
 import { useQuery } from "@tanstack/react-query";
 import { getInfoData, getPriceData } from "../utils/apis/api";
 import { Overview, OverviewItem, Description, TabWrap, Tab } from "../style/DetailStyle";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 interface coinNameType {
   state: {
     name: string;
@@ -90,9 +90,11 @@ const Detail = () => {
 
   return (
     <Container>
-      <Helmet>
-        <title>{state?.name}</title>
-      </Helmet>
+      <HelmetProvider>
+        <Helmet>
+          <title>{state?.name}</title>
+        </Helmet>
+      </HelmetProvider>
       <Header>
         {/* state에 name이 있으면 보여주고 그렇지 않으면 loading... */}
         <Title>
