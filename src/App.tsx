@@ -1,11 +1,11 @@
-import HookForm from "./HookForm";
+import TodoList from "./components/TodoList";
 import Global from "./style/Global";
 
 const App = () => {
   return (
     <>
       <Global />
-      <HookForm />
+      <TodoList />
     </>
   );
 };
