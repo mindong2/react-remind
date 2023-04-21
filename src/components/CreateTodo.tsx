@@ -15,10 +15,16 @@ const CreateTodo = () => {
     setValue,
   } = useForm<IForms>();
   const setTodos = useSetRecoilState(toDoState);
+
   const handleValid = ({ toDo }: IForms) => {
     setTodos((oldTodoList) => [{ text: toDo, id: Date.now(), category }, ...oldTodoList]);
     setValue("toDo", "");
   };
+
+  const clearList = () => {
+    setTodos([]);
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit(handleValid)}>
@@ -29,7 +35,8 @@ const CreateTodo = () => {
           })}
           placeholder="Todo"
         />
-        <button>add</button>
+        <button type="submit">add</button>
+        <button type="button" onClick={clearList}>ClearList</button>
         <p>{errors?.toDo?.message}</p>
       </form>
     </div>

@@ -3,6 +3,7 @@ import { ITodo, toDoState, Categories } from "../atom/atoms";
 
 const Todo = ({ text, category, id }: ITodo) => {
   const setTodos = useSetRecoilState(toDoState);
+
   const btnClick = (name: Categories) => {
     setTodos((oldTodos) => {
       const targetIndex = oldTodos.findIndex((v) => v.id === id);
@@ -13,12 +14,22 @@ const Todo = ({ text, category, id }: ITodo) => {
     });
   };
 
+  const deleteTodo = () => {
+    setTodos((oldTodos) => {
+      const targetIndex = oldTodos.findIndex(v => v.id === id);
+      const copyOldTodos = [...oldTodos];
+      copyOldTodos.splice(targetIndex,1)
+      return copyOldTodos;
+    })
+  }
+
   return (
     <li>
       {text}
-      {category !== "TO_DO" && <button onClick={() => btnClick(Categories.TO_DO)}>Todo</button>}
-      {category !== "DOING" && <button onClick={() => btnClick(Categories.DOING)}>Doing</button>}
-      {category !== "DONE" && <button onClick={() => btnClick(Categories.DONE)}>Done</button>}
+      {category !== Categories.TO_DO && <button onClick={() => btnClick(Categories.TO_DO)}>Todo</button>}
+      {category !== Categories.DOING && <button onClick={() => btnClick(Categories.DOING)}>Doing</button>}
+      {category !== Categories.DONE && <button onClick={() => btnClick(Categories.DONE)}>Done</button>}
+      <button onClick={deleteTodo}>Delete</button>
     </li>
   );
 };
