@@ -1,25 +1,35 @@
-import Global from "./style/Global";
-import { hourSelector, minuteState } from "./atom/atoms";
-import { useRecoilState } from "recoil";
+// react 18 -> npm i react-beautiful-dnd --legacy-peer-deps
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const App = () => {
-  const [minutes, setMinutes] = useRecoilState(minuteState);
-  const [hours, setHours] = useRecoilState(hourSelector);
-
-  const onChangeMinute = (e: React.FormEvent<HTMLInputElement>) => {
-    setMinutes(Number(e.currentTarget.value));
-  };
-
-  const onChangeHour = (e: React.FormEvent<HTMLInputElement>) => {
-    setHours(Number(e.currentTarget.value));
-  };
-
+  const onDragEnd = () => {};
   return (
-    <>
-      <Global />
-      <input value={minutes} onChange={onChangeMinute} type="number" />
-      <input value={hours} onChange={onChangeHour} type="number" />
-    </>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="one">
+        {(myProp) => (
+          <ul ref={myProp.innerRef} {...myProp.droppableProps}>
+            <Draggable draggableId="first" index={0}>
+              {(myDragProp) => (
+                <li ref={myDragProp.innerRef} {...myDragProp.draggableProps}>
+                  {/* dragHandleProps를 지정해준 요소를 드래그해야 이벤트가 일어남 */}
+                  <span {...myDragProp.dragHandleProps}>🔥</span>
+                  One
+                </li>
+              )}
+            </Draggable>
+
+            <Draggable draggableId="second" index={1}>
+              {(myDragProp) => (
+                <li ref={myDragProp.innerRef} {...myDragProp.draggableProps}>
+                  <span {...myDragProp.dragHandleProps}>🔥</span>
+                  Two
+                </li>
+              )}
+            </Draggable>
+          </ul>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
