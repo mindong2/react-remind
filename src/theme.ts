@@ -1,19 +1,13 @@
 import { DefaultTheme } from "styled-components";
 
 export const darkTheme: DefaultTheme = {
-  bgColor: "#2f3640",
-  textColor: "#f5f6fa",
-  accentColor: "#4cd137",
-  borderColor : "#fff",
-  hoverColor : '#fff',
-  btnImg : '/img/light.png'
+  bgColor: "#3f8cf2",
+  boardColor: "#dadfe9",
+  cardColor: "#fff",
 };
 
-export const lightTheme: DefaultTheme = {
-  bgColor: "#fff",
-  textColor: "#2f3640",
-  accentColor: "#4cd137",
-  borderColor : "#2f3640",
-  hoverColor : '#2f3640',
-  btnImg : '/img/dark.png'
-};
+// export const lightTheme: DefaultTheme = {
+//   bgColor: "#fff",
+//   boardColor: "#dadfe9",
+//   cardColor: "#fff",
+// };
