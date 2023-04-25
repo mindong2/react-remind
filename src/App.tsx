@@ -1,67 +1,33 @@
 // react 18 -> npm i react-beautiful-dnd --legacy-peer-deps
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
+import { toDoState } from "./atom/atoms";
+import { Wrapper, Boards } from './style/DndStyle'
+import Board from './components/Board'
 
-import styled from "styled-components";
-
-const Wrapper = styled.div`
-  display: flex;
-  max-width: 480px;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
-
-const Boards = styled.div`
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(1, 1fr);
-`;
-
-const Board = styled.div`
-  padding: 20px 10px;
-  padding-top: 30px;
-  background-color: ${(props) => props.theme.boardColor};
-  border-radius: 5px;
-  min-height: 200px;
-`;
-
-const Card = styled.div`
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 10px 10px;
-  background-color: ${(props) => props.theme.cardColor};
-`;
-
-const toDos = ["a", "b", "c", "d", "e", "f"];
 
 const App = () => {
-  const onDragEnd = () => {};
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  /* react-beautiful-dnd 에서 onDragEnd에서는  
+    result와 provide라는 인수를 받는다 (dnd 종료시 호출되는 함수)
+    그중 destination -> 드롭 된 위치
+    source -> 드래그 시작 위치
+    타입은 해당 함수의 d.ts 참고
+  */
+  const onDragEnd = ({destination, source, draggableId} :DropResult) => {
+    if(!destination) return;
+    // setToDos(oldTodos => {
+    //   const toDosCopy = [...oldTodos];
+    //   toDosCopy.splice(source.index, 1);
+    //   toDosCopy.splice(destination?.index, 0 , draggableId);
+    //   return toDosCopy;
+    // });
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(myProp) => (
-              <Board ref={myProp.innerRef} {...myProp.droppableProps}>
-                {toDos.map((toDo, i) => {
-                  return (
-                    <Draggable draggableId={toDo} index={i}>
-                      {(myDragProp) => (
-                        <Card ref={myDragProp.innerRef} {...myDragProp.dragHandleProps} {...myDragProp.draggableProps}>
-                          {/* dragHandleProps를 지정해준 요소를 드래그해야 이벤트가 일어남 */}
-                          {toDo}
-                        </Card>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {/* beautiful dnd param 내에 있는 기능 (이동시킬때 부모 크기변동 X) */}
-                {myProp.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(toDos).map((boardId) => <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />)}
         </Boards>
       </Wrapper>
     </DragDropContext>
