@@ -1,24 +1,24 @@
-import React from 'react'
+import React from "react";
 import { Draggable } from "react-beautiful-dnd";
-import {Card} from '../style/DndStyle'
-
+import { Card } from "../style/DndStyle";
 
 interface ICard {
-  toDo : string,
-  index : number,
+  toDoText: string;
+  toDoId: number;
+  index: number;
 }
 
-const DraggableCard = ({toDo, index} : ICard) => {
-    return (
-    <Draggable key={toDo} draggableId={toDo} index={index}>
-        {(provided, snapshot) => (
-          <Card isDragging = {snapshot.isDragging} ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-            {/* dragHandleProps를 지정해준 요소를 드래그해야 이벤트가 일어남 */}
-            {toDo}
-          </Card>
-        )}
-      </Draggable>
-    );
+const DraggableCard = ({ toDoId, toDoText, index }: ICard) => {
+  return (
+    <Draggable key={toDoId.toString()} draggableId={toDoId.toString()} index={index}>
+      {(provided, snapshot) => (
+        <Card isDragging={snapshot.isDragging} ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+          {/* dragHandleProps를 지정해준 요소를 드래그해야 이벤트가 일어남 */}
+          {toDoText}
+        </Card>
+      )}
+    </Draggable>
+  );
 };
 
 /* 
