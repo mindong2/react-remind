@@ -14,14 +14,37 @@ const App = () => {
     source -> 드래그 시작 위치
     타입은 해당 함수의 d.ts 참고
   */
-  const onDragEnd = ({destination, source, draggableId} :DropResult) => {
+  const onDragEnd = (info :DropResult) => {
+    const { destination, source, draggableId } = info;
     if(!destination) return;
-    // setToDos(oldTodos => {
-    //   const toDosCopy = [...oldTodos];
-    //   toDosCopy.splice(source.index, 1);
-    //   toDosCopy.splice(destination?.index, 0 , draggableId);
-    //   return toDosCopy;
-    // });
+    
+    if(destination?.droppableId === source.droppableId) {
+      setToDos((allBoards) => {
+        const copyBoard = [...allBoards[source.droppableId]];
+        copyBoard.splice(source.index, 1);
+        copyBoard.splice(destination?.index, 0 , draggableId);
+        return {
+          ...allBoards,
+          // object의 키가 이미 있기때문에 update를 할때는 아래 작성하면 덮어진다
+          [source.droppableId] : copyBoard
+        };
+      });
+    }else{
+      setToDos((allBoards) => {
+        const copyStartBoard = [...allBoards[source.droppableId]];
+        const copyEndBoard = [...allBoards[destination.droppableId]];
+        copyStartBoard.splice(source.index, 1);
+        copyEndBoard.splice(destination?.index, 0 , draggableId);
+        
+        return {
+          ...allBoards,
+          [source.droppableId] : copyStartBoard,
+          [destination.droppableId] : copyEndBoard
+        };
+        
+      });
+    }
+
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>

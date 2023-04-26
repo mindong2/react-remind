@@ -25,11 +25,19 @@ const BoardWrap = styled.div`
   min-height: 200px;
 `;
 
-const Card = styled.div`
+const Card = styled.div<{isDragging : boolean}>`
   border-radius: 5px;
   margin-bottom: 5px;
   padding: 10px 10px;
-  background-color: ${(props) => props.theme.cardColor};
+  background-color: ${(props) => props.isDragging ? '#f7f1e3' : props.theme.cardColor};
+  transition : background-color .25s ease-in-out;
 `;
 
-export {Wrapper, Boards, BoardWrap, Card}
+const Title = styled.h2`
+text-align: center;
+font-weight: 600;
+margin-bottom: 10px;
+font-size: 18px;
+`;
+
+export {Wrapper, Boards, BoardWrap, Card, Title}

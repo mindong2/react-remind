@@ -11,8 +11,8 @@ interface ICard {
 const DraggableCard = ({toDo, index} : ICard) => {
     return (
     <Draggable key={toDo} draggableId={toDo} index={index}>
-        {(myDragProp) => (
-          <Card ref={myDragProp.innerRef} {...myDragProp.dragHandleProps} {...myDragProp.draggableProps}>
+        {(provided, snapshot) => (
+          <Card isDragging = {snapshot.isDragging} ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
             {/* dragHandleProps를 지정해준 요소를 드래그해야 이벤트가 일어남 */}
             {toDo}
           </Card>
