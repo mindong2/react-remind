@@ -1,7 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
-import { Title } from "../style/DndStyle";
+import { Title, DropArea, BoardContainer, Form } from "../style/DndStyle";
 import DraggableCard from "./DraggableCard";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { ITodo, toDoState } from "../atom/atoms";
 import { useSetRecoilState } from "recoil";
@@ -11,42 +10,20 @@ interface ITodoProps {
   boardId: string;
 }
 
-interface IDropArea {
+export interface IDropArea {
   isDraggingOver: boolean;
   draggingFromThisWith: boolean;
 }
 
-const DropArea = styled.div<IDropArea>`
-  padding: 20px 10px;
-  padding-top: 30px;
-  background-color: ${({ isDraggingOver, draggingFromThisWith }) => (isDraggingOver ? "#48dbfb" : draggingFromThisWith ? "#00d2d3" : "#dff9fb")};
-  border-radius: 5px;
-  min-height: 200px;
-  transition: background-color 0.25s ease-in-out;
-`;
-
-const BoardContainer = styled.div`
-  padding: 20px 10px;
-  padding-top: 30px;
-  background-color: #dff9fb;
-  border-radius: 5px;
-  min-height: 200px;
-  transition: background-color 0.25s ease-in-out;
-`;
-
-const Form = styled.form`
-  width: 100%;
-  input {
-    width: 100%;
-  }
-`;
 interface IForm {
   toDo: string;
 }
+
 const Board = ({ toDos, boardId }: ITodoProps) => {
   // useRef => Dom에 직접접근
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const setTodo = useSetRecoilState(toDoState);
+
   const handleValid = ({ toDo }: IForm) => {
     const newItem = {
       id: Date.now(),
@@ -60,9 +37,22 @@ const Board = ({ toDos, boardId }: ITodoProps) => {
     });
     setValue("toDo", "");
   };
+
+  const removeBoard = () => {
+    setTodo((allBoards) => {
+      const copyBoards = {...allBoards};
+      delete copyBoards[boardId];
+
+      return {
+        ...copyBoards
+      };
+    })
+  }
+
   return (
     <Form onSubmit={handleSubmit(handleValid)}>
       <BoardContainer>
+        <img src="/img/close.png" alt="보드 제거 버튼" onClick={removeBoard} style={{cursor: 'pointer'}} />
         <Title>{boardId}</Title>
         <input type="text" {...register("toDo", { required: "할일을 작성해주세요" })} placeholder="할일을 작성해주세요" />
         <button>click</button>
@@ -78,7 +68,7 @@ const Board = ({ toDos, boardId }: ITodoProps) => {
               {toDos.map((toDo, index) => {
                 return (
                   // Draggable의 key와 draggableId의 값은 같아야한다
-                  <DraggableCard key={toDo.id.toString()} toDoId={toDo.id} toDoText={toDo.text} index={index} />
+                  <DraggableCard boardId={boardId} key={toDo.id.toString()} toDoId={toDo.id} toDoText={toDo.text} index={index} />
                 );
               })}
               {/* beautiful dnd param 내에 있는 기능 (이동시킬때 부모 크기변동 X) */}

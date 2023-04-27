@@ -1,21 +1,14 @@
-/*
-  추가해볼 기능
-  1. localStorage 저장
-  2. 수정, 삭제기능 (쓰레기통 drop시 제거도 고려)
-  3. 보드 자체를 옮겨보기
-  4. 어렵다면 새 인풋에 submit시 보드 추가
-*/
-
 // react 18 -> npm i react-beautiful-dnd --legacy-peer-deps
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { toDoState } from "./atom/atoms";
-import { Wrapper, Boards } from "./style/DndStyle";
+import { Wrapper, Boards, AddBoardBox } from "./style/DndStyle";
 import Board from "./components/Board";
+import Remover from './components/Remover'
+import { useState } from "react";
 
 const App = () => {
-  const ad = useRecoilValue(toDoState);
-  console.log(ad);
+  const [addBoard, setAddBoard] = useState<string>('')
   const [toDos, setToDos] = useRecoilState(toDoState);
   /* react-beautiful-dnd 에서 onDragEnd에서는  
     result와 provide라는 인수를 받는다 (dnd 종료시 호출되는 함수)
@@ -26,6 +19,18 @@ const App = () => {
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;
     if (!destination) return;
+
+    // 휴지통 추가
+    if(destination?.droppableId === 'remove') {
+      setToDos((allBoards) => {
+        const removeCopy = [...allBoards[source.droppableId]];
+        removeCopy.splice(source.index, 1);
+        return {
+          ...allBoards,
+          [source.droppableId] : removeCopy
+        }
+      })
+    }
 
     if (destination?.droppableId === source.droppableId) {
       setToDos((allBoards) => {
@@ -38,7 +43,7 @@ const App = () => {
           [source.droppableId]: copyBoard,
         };
       });
-    } else {
+    } else if((destination?.droppableId !== source.droppableId) &&  destination.droppableId !== 'remove'){
       setToDos((allBoards) => {
         const copyStartBoard = [...allBoards[source.droppableId]];
         const copyEndBoard = [...allBoards[destination.droppableId]];
@@ -53,14 +58,39 @@ const App = () => {
       });
     }
   };
+
+  const addBoardFn = (e : React.FormEvent<HTMLInputElement>) => {
+    setAddBoard(e.currentTarget.value);
+  }
+
+  const addBtnClick = () => {
+    if(addBoard === '') {
+      window.alert('보드 이름을 입력해주세요')
+      return;
+    };
+    setToDos((allBoards) => {
+      return {
+        ...allBoards,
+        [addBoard] : []
+      }
+    });
+  }
+
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <AddBoardBox>
+        <input onInput={addBoardFn} type="text" placeholder="보드를 추가해보세요" />
+        <button onClick={addBtnClick} type="button">추가</button>
+      </AddBoardBox>
       <Wrapper>
         <Boards>
           {Object.keys(toDos).map((boardId) => (
             <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
           ))}
+          
         </Boards>
+        <Remover />
       </Wrapper>
     </DragDropContext>
   );
