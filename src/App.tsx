@@ -1,98 +1,72 @@
-// react 18 -> npm i react-beautiful-dnd --legacy-peer-deps
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
-import { toDoState } from "./atom/atoms";
-import { Wrapper, Boards, AddBoardBox } from "./style/DndStyle";
-import Board from "./components/Board";
-import Remover from './components/Remover'
-import { useState } from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+const Wrapper = styled.div`
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+// motion.div로 styled-components를 만들기위해 아래와같이 작성
+const Box = styled(motion.div)`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0 30px;
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const Circle = styled(motion.div)`
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const boxVariants = {
+  start: { opacity: 0, scale: 0 },
+  end: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      bounce: 0.5,
+      // 자식 요소들에게 전달할 delay
+      delayChildren: 0.3,
+      // 자식요소들의 delay를 각각 계산해서 차례대로 전달
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const circleVariants = {
+  start: { opacity: 0 },
+  end: { opacity: 1 },
+};
 
 const App = () => {
-  const [addBoard, setAddBoard] = useState<string>('')
-  const [toDos, setToDos] = useRecoilState(toDoState);
-  /* react-beautiful-dnd 에서 onDragEnd에서는  
-    result와 provide라는 인수를 받는다 (dnd 종료시 호출되는 함수)
-    그중 destination -> 드롭 된 위치
-    source -> 드래그 시작 위치
-    타입은 해당 함수의 d.ts 참고
-  */
-  const onDragEnd = (info: DropResult) => {
-    const { destination, source } = info;
-    if (!destination) return;
-
-    // 휴지통 추가
-    if(destination?.droppableId === 'remove') {
-      setToDos((allBoards) => {
-        const removeCopy = [...allBoards[source.droppableId]];
-        removeCopy.splice(source.index, 1);
-        return {
-          ...allBoards,
-          [source.droppableId] : removeCopy
-        }
-      })
-    }
-
-    if (destination?.droppableId === source.droppableId) {
-      setToDos((allBoards) => {
-        const copyBoard = [...allBoards[source.droppableId]];
-        const copyBoardElement = copyBoard.splice(source.index, 1)[0];
-        copyBoard.splice(destination?.index, 0, copyBoardElement);
-        return {
-          ...allBoards,
-          // object의 키가 이미 있기때문에 update를 할때는 아래 작성하면 덮어진다
-          [source.droppableId]: copyBoard,
-        };
-      });
-    } else if((destination?.droppableId !== source.droppableId) &&  destination.droppableId !== 'remove'){
-      setToDos((allBoards) => {
-        const copyStartBoard = [...allBoards[source.droppableId]];
-        const copyEndBoard = [...allBoards[destination.droppableId]];
-        const copyBoardElement = copyStartBoard.splice(source.index, 1)[0];
-        copyEndBoard.splice(destination?.index, 0, copyBoardElement);
-
-        return {
-          ...allBoards,
-          [source.droppableId]: copyStartBoard,
-          [destination.droppableId]: copyEndBoard,
-        };
-      });
-    }
-  };
-
-  const addBoardFn = (e : React.FormEvent<HTMLInputElement>) => {
-    setAddBoard(e.currentTarget.value);
-  }
-
-  const addBtnClick = () => {
-    if(addBoard === '') {
-      window.alert('보드 이름을 입력해주세요')
-      return;
-    };
-    setToDos((allBoards) => {
-      return {
-        ...allBoards,
-        [addBoard] : []
-      }
-    });
-  }
-
-
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <AddBoardBox>
-        <input onInput={addBoardFn} type="text" placeholder="보드를 추가해보세요" />
-        <button onClick={addBtnClick} type="button">추가</button>
-      </AddBoardBox>
-      <Wrapper>
-        <Boards>
-          {Object.keys(toDos).map((boardId) => (
-            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
-          ))}
-          
-        </Boards>
-        <Remover />
-      </Wrapper>
-    </DragDropContext>
+    <Wrapper>
+      <Box variants={boxVariants} initial="start" animate="end">
+        {/* 부모의 variants내 속성들을 자식이 상속 -> 부모의 variants내 속성들과 이름을 맞춰주면 생략가능 */}
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+      </Box>
+      {/* 
+        Framer-motion을 사용하려면 motion 내의 element로 사용 
+        react-script 버전이 4.XX이면 콘솔오류 -> Craco로 해결
+        <motion.div></motion.div>
+      */}
+    </Wrapper>
   );
 };
 
