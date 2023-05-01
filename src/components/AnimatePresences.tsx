@@ -26,7 +26,7 @@ const boxVars = {
   exit: { y: 50, scale: 0, opacity: 0 },
 };
 
-const App = () => {
+const AnimatePresences = () => {
   const [visible, setVisible] = useState(false);
   const toggleVisible = () => setVisible((prev) => !prev);
   return (
@@ -43,4 +43,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default AnimatePresences;
