@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-import { getMovies, IMovie } from "../Util/apis";
+import { getComeMovies, getMovies, getPopMovies, getRateMovies, IMovie } from "../Util/apis";
 import { movieImageName } from "../Util/util";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-
+import { useMatch, useNavigate } from "react-router-dom";
+import Slider from "./Slider";
 const HomeWrap = styled.div`
   background-color: #000;
 `;
@@ -36,89 +36,108 @@ const OverView = styled.p`
   font-size: 30px;
 `;
 
-const Slider = styled.div`
-  position: relative;
-  height: 200px;
-  top: -100px;
+const Modal = styled(motion.div)`
+  position: fixed;
+  top: 14%;
+  left: 32%;
+  width: 720px;
+  height: 720px;
+  border-radius: 30px;
+  background-color: ${({ theme }) => theme.black.lighter};
   overflow: hidden;
-`;
-
-const SliderRow = styled(motion.div)`
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-`;
-
-const SliderItem = styled(motion.div)<{ bgphoto: string }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  padding: 30px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url(${({ bgphoto }) => bgphoto});
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  border-radius: 5px;
-  color: #fff;
-  text-align: center;
-  word-break: keep-all;
-  font-size: 28px;
-  cursor: pointer;
-  &:hover span {
-    opacity: 1;
-  }
-  span {
-    opacity: 0;
-    transition: all 0.2s ease-in-out;
+  img {
+    width: 100%;
+    vertical-align: top;
+    -webkit-user-drag: none;
   }
 `;
 
-const sliderVars = {
-  invisible: { x: window.outerWidth },
-  visible: { x: 0 },
-  exit: { x: -window.outerWidth },
+const ModalCont = styled.div`
+  .modal-text {
+    padding: 15px;
+    color: ${({ theme }) => theme.white.lighter};
+    overflow-y: "auto";
+    max-height: 50%;
+    h3 {
+      font-size: 32px;
+    }
+    p {
+      margin-top: 10px;
+      line-height: 1.3;
+    }
+    .stars {
+      color: #ffea2a;
+    }
+  }
+`;
+
+const OverLay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+`;
+
+const modalVars = {
+  invisible: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 const Home = () => {
-  const { isLoading, data } = useQuery<IMovie>(["movie", "nowPlaying"], getMovies);
-  const [sliderIdx, setSliderIdx] = useState(0);
-  const sliceNum = 6;
-  const [isExit, setIsExit] = useState(false);
-  const increaseSliderIdx = () => {
-    if (isExit) return;
-    setIsExit(true);
-    setSliderIdx((prev) => (sliderIdx < 2 ? prev + 1 : 0));
-  };
-  const toggleExit = () => setIsExit((prev) => !prev);
+  const { isLoading: movieLoading, data: movieData } = useQuery<IMovie>(["movie", "nowPlaying"], getMovies);
+  const { data: popData } = useQuery<IMovie>(["popMovie", "popular"], getPopMovies);
+  const { data: rateData } = useQuery<IMovie>(["rateMovie", "rate"], getRateMovies);
+  const { data: comeData } = useQuery<IMovie>(["comeMovie", "come"], getComeMovies);
+
+  const navigate = useNavigate();
+  const modalMatch = useMatch(`/movie/:movieId`);
+
+  const modalImg = modalMatch && movieData?.results.find((movieInfo) => String(movieInfo.id) === modalMatch?.params.movieId);
+
   return (
     <HomeWrap>
-      {isLoading ? (
+      {movieLoading ? (
         <Loader>Loading/...</Loader>
       ) : (
         <>
-          <Banner bgphoto={movieImageName(data?.results[0].backdrop_path || "")} onClickCapture={increaseSliderIdx}>
-            <Title>{data?.results[0].title}</Title>
-            <OverView>{data?.results[0].overview}</OverView>
+          <Banner bgphoto={movieImageName(movieData?.results[0].backdrop_path || "")}>
+            <Title>{movieData?.results[0].title}</Title>
+            <OverView>{movieData?.results[0].overview}</OverView>
           </Banner>
 
-          <Slider>
-            <AnimatePresence initial={false} onExitComplete={toggleExit}>
-              <SliderRow variants={sliderVars} initial="invisible" animate="visible" exit="exit" transition={{ duration: 1 }} key={sliderIdx}>
-                {data?.results
-                  .slice(1)
-                  .slice(sliceNum * sliderIdx, sliceNum * sliderIdx + 6)
-                  .map((movie) => (
-                    <SliderItem key={movie.id} bgphoto={movieImageName(movie.backdrop_path, "w500")}>
-                      <span>{movie.title}</span>
-                    </SliderItem>
-                  ))}
-              </SliderRow>
-            </AnimatePresence>
-          </Slider>
+          <Slider data={movieData}></Slider>
+          <Slider data={rateData}></Slider>
+          <Slider data={popData}></Slider>
+          <Slider data={comeData}></Slider>
+
+          {modalMatch ? (
+            <>
+              <AnimatePresence>
+                <motion.div variants={modalVars} animate="visible" initial="invisible" exit="exit">
+                  <OverLay onClick={() => navigate("/")} initial={{ opacity: 0 }} animate={{ opacity: 1 }}></OverLay>
+                  <Modal layoutId={modalMatch?.params.movieId}>
+                    <ModalCont>
+                      <img src={movieImageName(modalImg?.backdrop_path || "", "w500")} alt="" />
+                      <div className="modal-text">
+                        <h3>{modalImg?.title}</h3>
+                        <div className="more-info">
+                          <p>개봉일 : {modalImg?.release_date}</p>
+                          <p>
+                            <span className="stars">★</span> <span>{modalImg?.vote_average}</span>
+                          </p>
+                          <p>{modalImg?.overview ? modalImg?.overview : modalImg?.title}</p>
+                        </div>
+                      </div>
+                    </ModalCont>
+                  </Modal>
+                </motion.div>
+              </AnimatePresence>
+            </>
+          ) : null}
         </>
       )}
     </HomeWrap>
