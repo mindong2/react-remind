@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import TvShow from "./components/TvShow";
+import Search from "./components/Search";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import styled from "styled-components";
 
@@ -24,8 +25,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/movie/:movieId" element={<Home />} />
         <Route path="/tv" element={<TvShow />} />
-        {/* <Route path="/movie/:movieId" element={<TvShow />} /> */}
-        {/* <Route path='/search' element={<Search />} /> */}
+        <Route path="/tvModal/:tvId" element={<TvShow />} />
+        <Route path="/search/:word" element={<Search />} />
       </Routes>
     </AppContainer>
   );

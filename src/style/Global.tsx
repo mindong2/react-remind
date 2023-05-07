@@ -50,17 +50,17 @@ table {
 }
 * {
   box-sizing: border-box;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   color:black;
   line-height: 1.2;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 a {
   text-decoration:none;
