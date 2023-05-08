@@ -58,16 +58,16 @@ const Slider = ({ data, dataname, tv }: IData) => {
           {data?.results
             .slice(1)
             .slice(sliceNum * sliderIdx, sliceNum * sliderIdx + 6)
-            .map((movie) => (
+            .map((movie, idx) => (
               <SliderItem
                 key={movie.id}
                 onClick={() => ModalLoad(movie.id)}
                 variants={slideItemVars}
                 whileHover="hover"
                 bgphoto={movieImageName(movie.backdrop_path, "w500")}
-                layoutId={movie.id.toString()}
+                // layoutId={movie.id.toString()}
               >
-                <span>{movie.title}</span>
+                <span>{movie.name ? movie.name : movie.title}</span>
               </SliderItem>
             ))}
         </SliderRow>

@@ -27,6 +27,7 @@ const App = () => {
         <Route path="/tv" element={<TvShow />} />
         <Route path="/tvModal/:tvId" element={<TvShow />} />
         <Route path="/search/:word" element={<Search />} />
+        <Route path="/search/:word/:id" element={<Search />} />
       </Routes>
     </AppContainer>
   );

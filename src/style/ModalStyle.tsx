@@ -84,3 +84,12 @@ export const ModalClose = styled(motion.div)`
   color: ${({ theme }) => theme.white.lighter};
   cursor: pointer;
 `;
+
+export const PlaceHolder = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 34px;
+  font-weight: bold;
+`;

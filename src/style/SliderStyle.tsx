@@ -60,15 +60,13 @@ export const SliderItem = styled(motion.div)<{ bgphoto: string }>`
   word-break: keep-all;
   font-size: 28px;
   cursor: pointer;
-
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
+  &:first-of-type,
+  &:last-of-type {
     transform-origin: center right;
   }
 
   &:hover span {
+    transition-delay: 0.3s;
     opacity: 1;
   }
   span {

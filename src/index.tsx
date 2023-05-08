@@ -17,7 +17,7 @@ root.render(
     <React.StrictMode>
       <RecoilRoot>
         <QueryClientProvider client={client}>
-          <ReactQueryDevtools />
+          {/* <ReactQueryDevtools /> */}
           <ThemeProvider theme={theme}>
             <Global />
             <App />
