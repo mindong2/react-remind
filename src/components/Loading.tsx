@@ -36,7 +36,6 @@ const Spinner = styled.div`
     margin-top: -60px;
     overflow: hidden;
     transform-origin: 60px 60px;
-    -webkit-mask-image: -webkit-linear-gradient(top, #000000, rgba(0, 0, 0, 0));
     animation: rotate 1.2s infinite linear;
   }
   .loader-line-mask .loader-line {
