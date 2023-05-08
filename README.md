@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# Typescript와 React로 만든 토이 프로젝트
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# [myFlix](https://myflix-mindong.netlify.app/)
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+### 설명
 
-### `npm start`
+인기 영화사이트 Netflix를 오마주한 프로젝트입니다.
+기존에 사용해보지 않았던 react-query와 framer-motion, react-hook-form등 여러 라이브러리를 사용해볼수 있는 좋은 경험이었습니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+깔끔한 스타일링과 모션에 신경을썼고, 특히 검색기능과 검색페이지에 신경을 썼습니다.
+Branch: _master_
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 문제와 해결
 
-### `npm test`
+#### 문제
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Home.tsx와 TvShow.tsx 그리고 Search.tsx 세 페이지에서 Modal을 공통적으로 사용하여 컴포넌트화를 시키고 전달받은 API를 props로 각각 보냈으나 props내에 key값이 각각 다른것들이 존재하여 많은 타입오류를 겪었습니다.
 
-### `npm run build`
+####해결
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+interface내에 겹치지않는 key값들에 대한 타입을 ?:로 지정하여 없을수도 있다고 알려주었고, 컴포넌트 내에서는 삼항연산자를 통해 해결하였습니다.
+예를들어, Home.tsx에서 불러온 데이터에는 제목이 'title'로 들어가있고, TvShow.tsx의에서 불러오는 데이터는 제목이 'name'으로 지정이 되어있어
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+{ data?.title ? data?.title : data?.name }
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+위와 같이 서로다른 부분에 작성 하였습니다.
 
-### `npm run eject`
+####문제 2. router로 전달하는 검색어이기 때문인지 다른 페이지에서 검색을하면 괜찮았지만, 검색페이지 내에서 다시 검색을 하면 api 재호출을 하지 않아 리스트가 변경되지 않는 문제가 있었습니다.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+####해결
+react-query의 useQuery를 사용하였기에 검색어가 바뀌어도 useEffect를 사용한것처럼 검색어 변화에 반응하지 않은것이 이유라고 생각하여, 검색 후 useQuery에서 refetch라는 속성을 가져올수 있다는것을 알게되었습니다.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+const search = useParams().word || "";
+const { data, refetch } = useQuery<IMovie>(["search"], () => getSearch(search));
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+useEffect(() => {
+  refetch();
+}, [search, refetch]);
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+위 코드처럼 수정을 하여 Search 페이지 내에서 검색을해도 제대로 refetch하게 되어 문제를 해결했습니다.
 
-## Learn More
+## 미리보기
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![netflix (1)](https://user-images.githubusercontent.com/73930706/236831141-28bdb726-2343-4b28-86f3-91f0edaab889.gif)
