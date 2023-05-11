@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/react-remind/static/js/main.d4c6c94e.js",
-    "index.html": "/react-remind/index.html",
-    "main.d4c6c94e.js.map": "/react-remind/static/js/main.d4c6c94e.js.map"
+    "main.js": "/react-remind/index.html/static/js/main.f3396d0a.js",
+    "index.html": "/react-remind/index.html/index.html",
+    "main.f3396d0a.js.map": "/react-remind/index.html/static/js/main.f3396d0a.js.map"
   },
   "entrypoints": [
-    "static/js/main.d4c6c94e.js"
+    "static/js/main.f3396d0a.js"
   ]
 }
