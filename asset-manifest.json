@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/react-remind/static/js/main.d4c6c94e.js",
+    "index.html": "/react-remind/index.html",
+    "main.d4c6c94e.js.map": "/react-remind/static/js/main.d4c6c94e.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d4c6c94e.js"
+  ]
+}
