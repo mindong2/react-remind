@@ -39,7 +39,7 @@ const Modal = ({ movieData }: ImovieData) => {
             <ModalCont>
               {modalImg?.backdrop_path
               ? <img src={movieImageName(modalImg?.backdrop_path || "")} alt="" />
-              : <img src="https://fcea.co.kr/wp-content/uploads/2020/10/placeholder-4.png" />}
+              : <img src="https://fcea.co.kr/wp-content/uploads/2020/10/placeholder-4.png" alt="" />}
               
               <div className="content">
                 <motion.div whileHover={{ y: -20 }} className="poster">
