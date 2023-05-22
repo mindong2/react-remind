@@ -72,9 +72,18 @@ export const getRateTv = async () => {
   }
 };
 
+export const getAiringTv = async () => {
+  try {
+    const response = await axios.get(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getAirTv = async () => {
   try {
-    const response = await axios.get(`${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko`);
+    const response = await axios.get(`${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko&page=3`);
     return response.data;
   } catch (err) {
     console.log(err);

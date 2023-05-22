@@ -64,7 +64,7 @@ const Slider = ({ data, dataname, tv }: IData) => {
                 onClick={() => ModalLoad(movie.id)}
                 variants={slideItemVars}
                 whileHover="hover"
-                bgphoto={movieImageName(movie.backdrop_path, "w500")}
+                bgphoto={movie.backdrop_path ?  movieImageName(movie.backdrop_path, "w500") : 'https://nicevan001.blogpay.io/img/img_noimg.png'}
                 // layoutId={movie.id.toString()}
               >
                 <span>{movie.name ? movie.name : movie.title}</span>

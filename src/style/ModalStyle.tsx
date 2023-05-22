@@ -21,6 +21,9 @@ export const ModalBox = styled(motion.div)`
     height: 405px;
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
   }
+  &.active::before {
+    height: 480px;
+  }
   img {
     max-width: 100%;
     vertical-align: top;
@@ -90,6 +93,6 @@ export const PlaceHolder = styled.div`
   justify-content: center;
   align-items: center;
   color: #fff;
-  font-size: 34px;
+  font-size: 32px;
   font-weight: bold;
 `;

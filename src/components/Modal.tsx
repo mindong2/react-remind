@@ -35,15 +35,19 @@ const Modal = ({ movieData }: ImovieData) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           ></OverLay>
-          <ModalBox layoutId={modalImg?.id.toString()}>
+          <ModalBox layoutId={modalImg?.id.toString()} className={modalImg?.backdrop_path ? '' : 'active'}>
             <ModalCont>
-              <img src={movieImageName(modalImg?.backdrop_path || "")} alt="" />
+              {modalImg?.backdrop_path
+              ? <img src={movieImageName(modalImg?.backdrop_path || "")} alt="" />
+              : <img src="https://fcea.co.kr/wp-content/uploads/2020/10/placeholder-4.png" />}
+              
               <div className="content">
                 <motion.div whileHover={{ y: -20 }} className="poster">
                   {modalImg?.backdrop_path ? (
                     <img src={movieImageName(modalImg?.poster_path || "", "w500")} alt="" />
                   ) : (
-                    <PlaceHolder>이미지가 없습니다.</PlaceHolder>
+                    // <PlaceHolder>이미지가 없습니다.</PlaceHolder>
+                    <img src="https://nicevan001.blogpay.io/img/img_noimg.png" alt="placeholder 이미지" />
                   )}
                 </motion.div>
                 <div className="modal-text">
