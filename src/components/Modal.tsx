@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
 import { movieImageName } from "../Util/util";
 import { IMovieResult } from "../Util/apis";
-import { OverLay, ModalBox, ModalCont, ModalClose, PlaceHolder } from "../style/ModalStyle";
+import { OverLay, ModalBox, ModalCont, ModalClose } from "../style/ModalStyle";
 
 const modalVars = {
   invisible: { opacity: 0 },
