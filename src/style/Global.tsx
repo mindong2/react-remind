@@ -30,7 +30,8 @@ footer, header, hgroup, main, menu, nav, section {
 *[hidden] {
     display: none;
 }
-body {
+html,body {
+  font-size: 62.5%;
   line-height: 1;
 }
 menu, ol, ul {
@@ -66,6 +67,19 @@ a {
   text-decoration:none;
   color:inherit;
 }
+
+
+@media screen and (max-width:1400px){
+  html, body {font-size:50%;}
+}
+
+@media screen and (max-width:1000px){
+  html, body {font-size:42.5%;}
+}
+
+/* @media screen and (max-width:768px){
+  html, body {font-size:42.5%;}
+} */
 `;
 
 export default Global;

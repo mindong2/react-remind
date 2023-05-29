@@ -23,7 +23,8 @@ interface IData {
 const Slider = ({ data, dataname, tv }: IData) => {
   const [sliderIdx, setSliderIdx] = useState(0);
   const [back, setBack] = useState(false);
-  const sliceNum = 6;
+  let sliceNum = 6;
+  window.innerWidth > 768 ? (sliceNum = 6) : (sliceNum = 3);
   const increaseSliderIdx = () => {
     setSliderIdx((prev) => (sliderIdx < 2 ? prev + 1 : 0));
     setBack(false);
@@ -57,14 +58,14 @@ const Slider = ({ data, dataname, tv }: IData) => {
           </div>
           {data?.results
             .slice(1)
-            .slice(sliceNum * sliderIdx, sliceNum * sliderIdx + 6)
+            .slice(sliceNum * sliderIdx, sliceNum * sliderIdx + sliceNum)
             .map((movie, idx) => (
               <SliderItem
                 key={movie.id}
                 onClick={() => ModalLoad(movie.id)}
                 variants={slideItemVars}
                 whileHover="hover"
-                bgphoto={movie.backdrop_path ?  movieImageName(movie.backdrop_path, "w500") : 'https://nicevan001.blogpay.io/img/img_noimg.png'}
+                bgphoto={movie.backdrop_path ? movieImageName(movie.backdrop_path, "w500") : "https://nicevan001.blogpay.io/img/img_noimg.png"}
                 // layoutId={movie.id.toString()}
               >
                 <span>{movie.name ? movie.name : movie.title}</span>

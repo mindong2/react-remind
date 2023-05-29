@@ -35,12 +35,14 @@ const Modal = ({ movieData }: ImovieData) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           ></OverLay>
-          <ModalBox layoutId={modalImg?.id.toString()} className={modalImg?.backdrop_path ? '' : 'active'}>
+          <ModalBox layoutId={modalImg?.id.toString()} className={modalImg?.backdrop_path ? "" : "active"}>
             <ModalCont>
-              {modalImg?.backdrop_path
-              ? <img src={movieImageName(modalImg?.backdrop_path || "")} alt="" />
-              : <img src="https://fcea.co.kr/wp-content/uploads/2020/10/placeholder-4.png" alt="" />}
-              
+              {modalImg?.backdrop_path ? (
+                <img src={movieImageName(modalImg?.backdrop_path || "")} alt="" />
+              ) : (
+                <img src="https://fcea.co.kr/wp-content/uploads/2020/10/placeholder-4.png" alt="" />
+              )}
+
               <div className="content">
                 <motion.div whileHover={{ y: -20 }} className="poster">
                   {modalImg?.backdrop_path ? (

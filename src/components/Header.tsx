@@ -64,8 +64,8 @@ const Header = () => {
         >
           <motion.svg
             fill="currentColor"
-            initial={{ x: 180 }}
-            animate={{ x: searchOpen ? 0 : 180 }}
+            initial={{ x: window.innerWidth > 425 ? 180 : 0 }}
+            animate={{ x: window.innerWidth > 460 ? (searchOpen ? 0 : 180) : searchOpen ? 0 : 90 }}
             transition={{ ease: "linear" }}
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
