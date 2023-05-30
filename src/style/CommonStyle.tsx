@@ -15,6 +15,7 @@ export const Nav = styled(motion.nav)`
   z-index: 1000;
   @media screen and (max-width: 425px) {
     padding: 1.5rem;
+    justify-content: flex-start;
   }
 `;
 
@@ -30,6 +31,8 @@ export const Logo = styled(motion.svg)`
   fill: ${({ theme }) => theme.red};
   @media screen and (max-width: 425px) {
     margin-right: 3rem;
+    width: 8rem;
+    height: 2rem;
   }
   path {
     stroke-width: 0.6rem;
@@ -70,6 +73,9 @@ export const Search = styled(motion.form)`
     height: 2.5rem;
     cursor: pointer;
   }
+  @media screen and (max-width:425px) {
+    transform: scale(0.8);
+  }
 `;
 
 export const SearchInput = styled(motion.input)`
@@ -79,7 +85,7 @@ export const SearchInput = styled(motion.input)`
   margin-left: 1rem;
   color: #fff;
   @media screen and (max-width: 425px) {
-    max-width: 13rem;
+    max-width: 16rem;
   }
 `;
 

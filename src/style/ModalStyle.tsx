@@ -12,7 +12,7 @@ export const ModalBox = styled(motion.div)`
   border-radius: 3rem;
   background-color: ${({ theme }) => theme.black.lighter};
   overflow: auto;
-  z-index: 1001;
+  z-index: 1003;
   &::before {
     content: "";
     position: absolute;
@@ -34,7 +34,9 @@ export const ModalBox = styled(motion.div)`
     top: 20rem;
     width: 90%;
     height: auto;
-    min-height: 50rem;
+    &::before {
+      height: 0;
+    }
   }
 `;
 
@@ -94,6 +96,7 @@ export const OverLay = styled(motion.div)`
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
+  z-index: 1002;
 `;
 
 export const ModalClose = styled(motion.div)`
